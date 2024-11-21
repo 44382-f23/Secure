@@ -44,3 +44,18 @@ def register():
         else:
             flash("Username already exists.")
     return render_template('register.html')
+@app.route('/chat', methods= ['GET', 'POST'])
+
+#Route for the chat functioning 
+def chat():                                  
+    if 'username' not in session:
+        return redirect(url_for('login'))
+    if request.method == 'POST':
+        message = request.form['message']
+        save_message(session['username'], message)
+    
+    #Get the chat history to be visible
+    chat_history = get_chat_history()
+    return render_template('chat.html',username=session['username'],chat_history=chat_history)
+
+ 
