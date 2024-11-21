@@ -1,7 +1,7 @@
 from flask import Flask, render_template, request, redirect, url_for, session, flash
 from werkzeug.security import generate_password_hash, check_password_hash
 import sqlite3
-from database import init_db, register_user, get_user_password, save_message, get_chat_history
+from database import init_db, register_user, get_user_password, save_message, get_chat_history # type: ignore
 
 #Initialize the flask application
 app = Flask(__name__)
@@ -43,7 +43,7 @@ def register():
             return redirect(url_for('login'))
         else:
             flash("Username already exists.")
-    return render_template('register.html')
+        return render_template('register.html')
 @app.route('/chat', methods= ['GET', 'POST'])
 
 #Route for the chat functioning 
@@ -63,11 +63,10 @@ def chat():
 #A way for logging out of the user
 def logout():
     session.pop('username', None)
-    return redirect(url_for(('login'))
+    return redirect(url_for('login'))
                     
 
 #Making sure the database is initialized before starting the server.          
-if__name__ == '__main__':
+if __name__ == '__main__':   
     init_db()
-    app.run(debug = True)
- 
+app.run(debug = True)
