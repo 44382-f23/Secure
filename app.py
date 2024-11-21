@@ -58,4 +58,16 @@ def chat():
     chat_history = get_chat_history()
     return render_template('chat.html',username=session['username'],chat_history=chat_history)
 
+@app.route('/logout')
+
+#A way for logging out of the user
+def logout():
+    session.pop('username', None)
+    return redirect(url_for(('login'))
+                    
+
+#Making sure the database is initialized before starting the server.          
+if__name__ == '__main__':
+    init_db()
+    app.run(debug = True)
  
