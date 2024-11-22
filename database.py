@@ -22,3 +22,11 @@ def register_user(username,password):
     finally:
         conn.close()
 
+def get_user_password(username):
+    conn = sqlite3.connect('chat_app.db')
+    cursor = conn.cursor()
+    cursor.execute("SELECT password FROM users WHERE username = ?", (username,))
+    result = cursor.fetchone()
+    conn.close()
+    return result[0] if result else None
+
