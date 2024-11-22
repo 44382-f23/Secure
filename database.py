@@ -30,3 +30,16 @@ def get_user_password(username):
     conn.close()
     return result[0] if result else None
 
+def save_message(username, message):
+    conn = sqlite3.connect('chat_app.db')
+    cursor = conn.cursor()
+    cursor.execute("INSERT INTO messages(username, message) VALUES (?,?)",(username, message))
+    conn.commit()
+
+def get_chat_history():
+    conn = sqlite3.connect('chat_app.db')
+    cursor = conn.cursor()
+    cursor.execute("SELECT username, message FROM messages ORDER BY id")
+    chat_history = cursor.fetchall()
+    conn.close()
+    return chat_history
