@@ -28,7 +28,7 @@ def login():
             flash("Login failed.Please cleck your credentials")
             session['username'] = username
             return redirect(url_for('login'))
-        return render_template('login.html')
+    return render_template('login.html')
 @app.route('/register', methods = ['GET', 'POST'])
 
 #Handling user registration

@@ -7,18 +7,19 @@
 <body>
     <h1>Welcome, {{ username }}</h1>
     <form method="POST" action= "{{ url_for('chat') }}">
-    <label for="message">Enter message:</label>
+    <label for="message"> Enter message: </label>
     <input type="text" id ="message" name="message" required>
     <button type = "submit">Send</button>
 </form>
 <h2>Chat History</h2>
 <div id="chat-history">
-    {% for user, message in chat-history %}
-        <p><strong>{{ user }}:</strong>{{ message}}</p>
+    {% for user, message in chat_history %}
+        <p><strong>{{ user }}:</strong>{{ message }}</p>
     {% endfor %}
     </div>
 
-    <br><a href="{{ url_for('logout') }}">Logout</a>
+    <br>
+    <a href="{{ url_for('logout') }}">Logout</a>
 
 </body>
 </html>
