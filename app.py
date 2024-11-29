@@ -29,24 +29,26 @@ def login():
             session['username'] = username
             return redirect(url_for('login'))
     return render_template('login.html')
-@app.route('/register', methods = ['GET', 'POST'])
+
 
 #Handling user registration
+@app.route('/register', methods = ['GET', 'POST'])
 def register():                                
-        if request.method == 'POST':
-            username = request.form['username']
-            password = request.form['password']
+    if request.method == 'POST':
+        username = request.form['username']
+        password = request.form['password']
 
         #Determines to get the user registration
-        if register_user(username, password):
-            flash("Registration successful! Please log in.")
-            return redirect(url_for('login'))
-        else:
-            flash("Username already exists.")
-        return render_template('register.html')
-@app.route('/chat', methods= ['GET', 'POST'])
+    if register_user(username, password):
+        flash("Registration successful! Please log in.")
+        return redirect(url_for('login'))
+    else:
+        flash("Username already exists.")
+    return render_template('register.html')
+ 
 
 #Route for the chat functioning 
+@app.route('/chat', methods= ['GET', 'POST'])
 def chat():                                  
     if 'username' not in session:
         return redirect(url_for('login'))
@@ -69,4 +71,4 @@ def logout():
 #Making sure the database is initialized before starting the server.          
 if __name__ == '__main__':   
     init_db()
-app.run(debug = True)
+    app.run(debug = True)
