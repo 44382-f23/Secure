@@ -26,7 +26,7 @@ def register_user(username,password):
     
     hashed_password = generate_password_hash(password)
     
-    cursor.execute("INSERT INTO users (username, password) VALUES (?,?),(username, hashed_password)")
+    cursor.execute("INSERT INTO users (username, password) VALUES (?,?)",(username, hashed_password))
 
     conn.commit()
     conn.close()
