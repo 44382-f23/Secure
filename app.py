@@ -12,7 +12,7 @@ def home():
     return redirect(url_for('login'))
 
 #Defining the login with username and password.
-@app.route('/login', methods=['GET','POST'])
+@app.route('/login', methods=['GET', 'POST'])
 def login():                                    
     if request.method == 'POST':
         username = request.form['username']
@@ -25,7 +25,6 @@ def login():
             return redirect(url_for('chat'))
         else:
             flash("Login failed.Please cleck your credentials")
-            session['username'] = username
             return redirect(url_for('login'))
     return render_template('login.html')
 
@@ -37,8 +36,8 @@ def login():
 
 def register():                                
     if request.method == 'POST':
-        username = request.form.get['username']
-        password = request.form.get['password']
+        username = request.form['username']
+        password = request.form['password']
 
         #Determines to get the user registration
         if register_user(username, password):
@@ -55,6 +54,7 @@ def register():
 def chat():                                  
     if 'username' not in session:
         return redirect(url_for('login'))
+    
     if request.method == 'POST':
         message = request.form['message']
         save_message(session['username'], message)
@@ -74,4 +74,4 @@ def logout():
 #Making sure the database is initialized before starting the server.          
 if __name__ == '__main__':   
     init_db()
-    app.run(debug = True)
+    app.run(debug=True)
