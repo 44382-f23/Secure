@@ -11,12 +11,13 @@
     <input type="text" id ="message" name="message" required>
     <button type = "submit">Send</button>
 </form>
+
 <h2>Chat History</h2>
 <div id="chat-history">
     {% for user, message in chat_history %}
-        <p><strong>{{ user }}:</strong>{{ message }}</p>
+        <p><strong>{{ user }}:</strong>{{ message }} <em> ({{ timestamp }})</em></p>
     {% endfor %}
-    </div>
+</div>
 
     <br>
     <a href="{{ url_for('logout') }}">Logout</a>
