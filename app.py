@@ -39,6 +39,10 @@ def register():
         username = request.form['username']
         password = request.form['password']
 
+        if not username or not password:
+            flash("Username and password cannot be empty.")
+            return redirect(url_for('register'))
+
         #Determines to get the user registration
         if register_user(username, password):
             flash("Registration successful! Please log in.")

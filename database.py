@@ -1,5 +1,5 @@
 import sqlite3
-from werkzeug.security import generate_password_hash,
+from werkzeug.security import generate_password_hash, check_password_hash
 
 DATABASE = 'chat_app.db'
 
@@ -18,17 +18,32 @@ def register_user(username,password):
     cursor = conn.cursor()
 
     cursor.execute("SELECT * FROM users WHERE username = ?", (username,))
-    if cursor.fetchone():
+    user = cursor.fetchone()
+
+    if user:
         conn.close()
         return False   
     
     hashed_password = generate_password_hash(password)
-
-    cursor.execute("INSERT INTO users (username, password) VALUES (?,?),(usernmae, hashed_password)")
+    
+    cursor.execute("INSERT INTO users (username, password) VALUES (?,?),(username, hashed_password)")
 
     conn.commit()
     conn.close()
     return True
+
+def check_user_password(username, entered_password):
+    conn = sqlite3.connect(DATABASE)
+    cursor = conn.cursor()
+
+    cursor.execute("SELECT password FROM users WHERE username = ?", (username,))
+    stored_hash = cursor.fetchone()
+
+    if stored_hash and check_password_hash(stored_hash[0], entered_password):
+        conn.close()
+        return True  # Password is correct
+    conn.close()
+    return False     #if password is incorrect 
 
 def get_user_password(username):
     conn = sqlite3.connect(DATABASE)
