@@ -9,7 +9,7 @@ def init_db():
     conn = sqlite3.connect(DATABASE)
     cursor = conn.cursor()
     cursor.execute(''' CREATE TABLE IF NOT EXISTS users(id INTERGER PRIMARY KEY AUTOINCREMENT, username TEXT UNIQUE NOT NULL, password TEXT NOT NULL)''')
-    cursor.execute('''CREATE TABLE IF NOT EXISTS messages (id INTEGER PRIMARY KEY AUTOINCREMENT, username TEXT NOT NULL, message TEXT NOT NULL, timestamp DATETIME DEFAULT CURRENT_TIMESTAMP)''')
+    cursor.execute('''CREATE TABLE IF NOT EXISTS messages (id INTEGER PRIMARY KEY AUTOINCREMENT, username TEXT NOT NULL, message TEXT NOT NULL)''')
     conn.commit()
     conn.close()
 
@@ -64,7 +64,7 @@ def save_message(username, message):
 def get_chat_history():
     conn = sqlite3.connect(DATABASE)
     cursor = conn.cursor()
-    cursor.execute("SELECT username, message, timestamp FROM messages ORDER BY timestamp DESC")
+    cursor.execute("SELECT username, message FROM messages ORDER BY id DESC")
     chat_history = cursor.fetchall()
     conn.close()
     return chat_history
