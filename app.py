@@ -41,14 +41,14 @@ def register():
 
         if not username or not password:
             flash("Username and password cannot be empty.")
-            return redirect(url_for('register'))
+            return render_template('register')
 
         #Determines to get the user registration
         if register_user(username, password):
             flash("Registration successful! Please log in.")
-            return redirect(url_for('login'))
+            return render_template('register.html')
         else:
-            flash("Username already exists.")
+            flash("Username already exists. Choose a different one.")
     return render_template('register.html')
 
 
