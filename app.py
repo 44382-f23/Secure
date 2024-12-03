@@ -25,7 +25,7 @@ def login():
             return redirect(url_for('chat'))
         else:
             flash("Login failed.Please cleck your credentials")
-            return redirect(url_for('login'))
+            return render_template('login.html')
     return render_template('login.html')
 
 
@@ -41,7 +41,7 @@ def register():
 
         if not username or not password:
             flash("Username and password cannot be empty.")
-            return render_template('register')
+            return redirect(url_for('login'))
 
         #Determines to get the user registration
         if register_user(username, password):
