@@ -1,11 +1,22 @@
 from flask import Flask, render_template, request, redirect, url_for, session, flash
 from werkzeug.security import generate_password_hash, check_password_hash
 from database import init_db, register_user, get_user_password, save_message, get_chat_history 
+import re
 
 #Initialize the flask application
 app = Flask(__name__)
 app.secret_key = 'supersecretkey'
 
+#Password must meet the length.
+def validate_username(username):
+    if not username or len(username) > 20 or not re.match(r'^[a-zA-Z0-9_]+$', username):
+        return False
+    return True
+
+def validate_password(password):
+    if not password or len(password) < 8:
+        return False
+    return True
 #Route for the home page by default it redirects to the login page
 @app.route('/')
 def home():
@@ -72,6 +83,8 @@ def chat():
 #A way for logging out of the user
 def logout():
     session.pop('username', None)
+    session.clear()
+    flash("You have been logged out")
     return redirect(url_for('login'))
                     
 
