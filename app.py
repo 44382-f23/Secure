@@ -50,6 +50,17 @@ def register():
         username = request.form['username']
         password = request.form['password']
 
+        print(f"Password received: {password}")  # Verifies the actual password entered
+        print(f"Password length: {len(password)}")  # Verifies its length
+
+        if not validate_username(username):
+            flash("Invalid username. Must be alphanumeric and less than 20 characters.")
+            return render_template('register.html')
+
+        if not validate_password(password):
+            flash("Invalid password. Must be at least 8 characters long.")
+            return render_template('register.html')
+        
         if not username or not password:
             flash("Username and password cannot be empty.")
             return redirect(url_for('login'))
