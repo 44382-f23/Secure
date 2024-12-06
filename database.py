@@ -9,7 +9,12 @@ def init_db():
     conn = sqlite3.connect(DATABASE)
     cursor = conn.cursor()
     cursor.execute(''' CREATE TABLE IF NOT EXISTS users(id INTERGER PRIMARY KEY AUTOINCREMENT, username TEXT UNIQUE NOT NULL, password TEXT NOT NULL)''')
-    cursor.execute('''CREATE TABLE IF NOT EXISTS messages (id INTEGER PRIMARY KEY AUTOINCREMENT, username TEXT NOT NULL, message TEXT NOT NULL,timestamp DATETIME DEFAULT CURRENT_TIMESTAMP)''')
+    cursor.execute("PRAGMA table_info(messages)")
+    columns = [column[1] for column in cursor.fetchall()]
+    if 'timestamp' not in columns:
+        cursor.execute(''' 
+        ALTER TABLE messages ADD COLUMN timestamp DATETIME DEFAULT CURRENT_TIMESTAMP
+        ''')
     conn.commit()
     conn.close()
 
@@ -64,7 +69,8 @@ def save_message(username, message):
 def get_chat_history():
     conn = sqlite3.connect(DATABASE)
     cursor = conn.cursor()
-    cursor.execute("SELECT username, message,timestamp FROM messages ORDER BY id DESC")
+    cursor.execute("SELECT username, message, timestamp FROM messages ORDER BY id DESC")  # Added timestamp
     chat_history = cursor.fetchall()
     conn.close()
     return chat_history
+

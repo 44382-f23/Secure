@@ -21,7 +21,7 @@ def validate_password(password):
 #Route for the home page by default it redirects to the login page
 @app.route('/')
 def home():
-    return redirect(url_for('login.html'))
+    return redirect(url_for('login'))
 
 #Defining the login with username and password.
 @app.route('/login', methods=['GET', 'POST'])
@@ -34,7 +34,8 @@ def login():
         #Checks the credentials 
         if db_password and check_password_hash(db_password, password):
             session['username'] = username
-            return redirect(url_for('chat.html'))
+            return redirect(url_for('chat'))
+        
         else:
             flash("Login failed.Please cleck your credentials")
             return render_template('login.html')
