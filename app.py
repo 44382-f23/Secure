@@ -2,6 +2,7 @@ from flask import Flask, render_template, request, redirect, url_for, session, f
 from werkzeug.security import generate_password_hash, check_password_hash
 from database import init_db, register_user, get_user_password, save_message, get_chat_history 
 import re
+from datetime import datetime
 
 #Initialize the flask application
 app = Flask(__name__)
@@ -50,13 +51,12 @@ def register():
         username = request.form['username']
         password = request.form['password']
 
-        print(f"Password received: {password}")  # Verifies the actual password entered
-        print(f"Password length: {len(password)}")  # Verifies its length
-
+        # Validate username
         if not validate_username(username):
             flash("Invalid username. Must be alphanumeric and less than 20 characters.")
             return render_template('register.html')
 
+        # Validate password
         if not validate_password(password):
             flash("Invalid password. Must be at least 8 characters long.")
             return render_template('register.html')

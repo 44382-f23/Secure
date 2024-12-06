@@ -2,25 +2,28 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Chat Room</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
 </head>
 <body>
-    <h1>Welcome, {{ username }}</h1>
-    <form method="POST" action= "{{ url_for('chat') }}">
-    <label for="message"> Enter message: </label>
-    <input type="text" id ="message" name="message" required>
-    <button type = "submit">Send</button>
-</form>
+    <div class="container">
+        <h1>Welcome, {{ username }}</h1>
+        <form method="POST" action="{{ url_for('chat') }}">
+            <label for="message">Enter message:</label>
+            <input type="text" id="message" name="message" required>
+            <button type="submit">Send</button>
+        </form>
 
-<h2>Chat History</h2>
-<div id="chat-history">
-    {% for user, message in chat_history %}
-        <p><strong>{{ user }}:</strong>{{ message }} <em> ({{ timestamp }})</em></p>
-    {% endfor %}
-</div>
+        <h2>Chat History</h2>
+        <div id="chat-history">
+            {% for user, message in chat_history %}
+                <p><strong>{{ user }}:</strong> {{ message }} <em> (No Timestamp Available)</em></p>
+            {% endfor %}
 
-    <br>
-    <a href="{{ url_for('logout') }}">Logout</a>
+        </div>
 
+        <p><a href="{{ url_for('logout') }}">Logout</a></p>
+    </div>
 </body>
 </html>
