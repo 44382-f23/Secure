@@ -8,6 +8,17 @@
 </head>
 <body>
     <div class="container">
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                <ul>
+                    {% for message in messages %}
+                        <li>{{ message }}</li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+        {% endwith %}
+
+    
         <h1>Welcome, {{ username }}</h1>
         <form method="POST" action="{{ url_for('chat') }}">
             <label for="message">Enter message:</label>
@@ -16,12 +27,19 @@
         </form>
 
         <h2>Chat History</h2>
+        
         <div id="chat-history">
-            {% for user, message in chat_history %}
-                <p><strong>{{ user }}:</strong> {{ message }} <em> (No Timestamp Available)</em></p>
+            {% for user, message, timestamp in chat_history %}
+                <p><strong>{{ user }}:</strong> {{ message }} <em>({{ timestamp }})</em></p>
             {% endfor %}
-
         </div>
+        
+        <script>
+            // Clear the message input field after form submission
+            document.querySelector('form').addEventListener('submit', function() {
+                document.querySelector('#message').value = '';  // Clear the message input field
+            });
+        </script>
 
         <p><a href="{{ url_for('logout') }}">Logout</a></p>
     </div>
