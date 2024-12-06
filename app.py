@@ -21,7 +21,7 @@ def validate_password(password):
 #Route for the home page by default it redirects to the login page
 @app.route('/')
 def home():
-    return redirect(url_for('login'))
+    return redirect(url_for('login.html'))
 
 #Defining the login with username and password.
 @app.route('/login', methods=['GET', 'POST'])
@@ -34,7 +34,7 @@ def login():
         #Checks the credentials 
         if db_password and check_password_hash(db_password, password):
             session['username'] = username
-            return redirect(url_for('chat'))
+            return redirect(url_for('chat.html'))
         else:
             flash("Login failed.Please cleck your credentials")
             return render_template('login.html')
@@ -63,7 +63,7 @@ def register():
         
         if not username or not password:
             flash("Username and password cannot be empty.")
-            return redirect(url_for('login'))
+            return redirect(url_for('login.html'))
 
         #Determines to get the user registration
         if register_user(username, password):
@@ -91,12 +91,13 @@ def chat():
 
 @app.route('/logout')
 
+
 #A way for logging out of the user
 def logout():
     session.pop('username', None)
     session.clear()
     flash("You have been logged out")
-    return redirect(url_for('login'))
+    return redirect(url_for('login.html'))
                     
 
 #Making sure the database is initialized before starting the server.          

@@ -28,10 +28,11 @@
 
         <h2>Chat History</h2>
         
-        <div id="chat-history">
-            {% for user, message, timestamp in chat_history %}
-                <p><strong>{{ user }}:</strong> {{ message }} <em>({{ timestamp }})</em></p>
-            {% endfor %}
+        <div>
+        {% for user, message in chat_history %}
+             <p><strong>{{ user }}:</strong> {{ message }}</p>
+        {% endfor %}
+    
         </div>
         
         <script>
