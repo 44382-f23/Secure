@@ -5,18 +5,33 @@ DATABASE = 'chat_app.db'
 
 
 #Initialize the database
+
+# Database initialization function (example)
 def init_db():
     conn = sqlite3.connect(DATABASE)
     cursor = conn.cursor()
-    cursor.execute(''' CREATE TABLE IF NOT EXISTS users(id INTERGER PRIMARY KEY AUTOINCREMENT, username TEXT UNIQUE NOT NULL, password TEXT NOT NULL)''')
-    cursor.execute("PRAGMA table_info(messages)")
-    columns = [column[1] for column in cursor.fetchall()]
-    if 'timestamp' not in columns:
-        cursor.execute(''' 
-        ALTER TABLE messages ADD COLUMN timestamp DATETIME DEFAULT CURRENT_TIMESTAMP
-        ''')
+
+    # Creating the 'messages' table with 'timestamp'
+    cursor.execute("""
+    CREATE TABLE IF NOT EXISTS messages (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        username TEXT,
+        message TEXT,
+        timestamp DATETIME DEFAULT CURRENT_TIMESTAMP
+    );
+    """)
     conn.commit()
     conn.close()
+
+def add_timestamp_column():
+    conn = sqlite3.connect(DATABASE)
+    cursor = conn.cursor()
+
+    # Alter the table to add the timestamp column
+    cursor.execute("ALTER TABLE messages ADD COLUMN timestamp DATETIME DEFAULT CURRENT_TIMESTAMP;")
+    conn.commit()
+    conn.close()
+
 
 def register_user(username,password):
     conn = sqlite3.connect(DATABASE)
