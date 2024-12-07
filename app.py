@@ -2,7 +2,7 @@ from flask import Flask, render_template, request, redirect, url_for, session, f
 from werkzeug.security import generate_password_hash, check_password_hash
 from database import init_db, register_user, get_user_password, save_message, get_chat_history 
 import re
-from datetime import datetime
+
 
 #Initialize the flask application
 app = Flask(__name__)
@@ -102,6 +102,6 @@ def logout():
                     
 
 #Making sure the database is initialized before starting the server.          
-if __name__ == '__main__':   
+if __name__ == '__main__':  
     init_db()
     app.run(debug=True)

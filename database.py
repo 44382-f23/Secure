@@ -3,32 +3,30 @@ from werkzeug.security import generate_password_hash, check_password_hash
 
 DATABASE = 'chat_app.db'
 
-
 #Initialize the database
-
-# Database initialization function (example)
 def init_db():
     conn = sqlite3.connect(DATABASE)
     cursor = conn.cursor()
-
-    # Creating the 'messages' table with 'timestamp'
-    cursor.execute("""
+    
+    # Create the users table
+    cursor.execute('''
+    CREATE TABLE IF NOT EXISTS users (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        username TEXT UNIQUE NOT NULL,
+        password TEXT NOT NULL
+    )
+    ''')
+    
+    # Create the messages table
+    cursor.execute('''
     CREATE TABLE IF NOT EXISTS messages (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
-        username TEXT,
-        message TEXT,
+        username TEXT NOT NULL,
+        message TEXT NOT NULL,
         timestamp DATETIME DEFAULT CURRENT_TIMESTAMP
-    );
-    """)
-    conn.commit()
-    conn.close()
-
-def add_timestamp_column():
-    conn = sqlite3.connect(DATABASE)
-    cursor = conn.cursor()
-
-    # Alter the table to add the timestamp column
-    cursor.execute("ALTER TABLE messages ADD COLUMN timestamp DATETIME DEFAULT CURRENT_TIMESTAMP;")
+    )
+    ''')
+    
     conn.commit()
     conn.close()
 
