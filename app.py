@@ -2,6 +2,7 @@ from flask import Flask, render_template, request, redirect, url_for, session, f
 from werkzeug.security import generate_password_hash, check_password_hash
 from database import init_db, register_user, get_user_password, save_message, get_chat_history 
 import re
+import os
 
 
 #Initialize the flask application
@@ -101,7 +102,16 @@ def logout():
     return redirect(url_for('login.html'))
                     
 
-#Making sure the database is initialized before starting the server.          
+#Making sure the database is initialized before starting the server.  
+init_db()        
 if __name__ == '__main__':  
-    init_db()
+
     app.run(debug=True)
+
+# Check if the file exists and delete it
+if os.path.exists('chat_app.db'):
+    os.remove('chat_app.db')
+
+# Recreate the database
+from database import init_db
+init_db()  # Make sure the users table is created

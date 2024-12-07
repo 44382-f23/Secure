@@ -27,7 +27,8 @@ def init_db():
     )
     ''')
     
-    conn.commit()
+    cursor.execute("SELECT name FROM sqlite_master WHERE type='table';")
+    tables = cursor.fetchall()
     conn.close()
 
 
@@ -67,9 +68,14 @@ def get_user_password(username):
     conn = sqlite3.connect(DATABASE)
     cursor = conn.cursor()
     cursor.execute("SELECT password FROM users WHERE username = ?", (username,))
-    result = cursor.fetchone()
+    db_password = cursor.fetchone()
+     
     conn.close()
-    return result[0] if result else None
+
+    
+    if db_password:
+        return db_password[0]
+    return None
 
 def save_message(username, message):
     conn = sqlite3.connect(DATABASE)
