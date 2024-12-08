@@ -32,8 +32,8 @@
         
         <!-- Display chat history -->
         <div>
-            {% for user, message, timestamp in chat_history %}
-                <p><strong>{{ user }}:</strong> {{ message }} <em>({{ timestamp }})</em></p>
+            {% for user, message in chat_history %}
+                <p><strong>{{ user }}:</strong> {{ message }}</p>
             {% endfor %}
         </div>
 

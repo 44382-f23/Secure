@@ -1,8 +1,7 @@
 from flask import Flask, render_template, request, redirect, url_for, session, flash
 from werkzeug.security import generate_password_hash, check_password_hash
-from database import init_db, register_user, get_user_password, save_message, get_chat_history 
+from database import init_db, register_user, get_user_password, save_message
 import re 
-import time
 
 
 
@@ -81,27 +80,20 @@ def register():
 #Route for the chat functioning 
 @app.route('/chat', methods=['GET', 'POST'])
 def chat():
-    # Initialize chat_history in session if it doesn't exist
-    if 'chat_history' not in session:
-        session['chat_history'] = []
-
-    # Handle POST request (user sends a message)
     if request.method == 'POST':
         message = request.form['message']
-        username = session.get('username', 'Guest')  # Get username from session or set default as 'Guest'
+        username = session.get('username', 'Anonymous')  # Use session or a default username
         
-        # Append new message to chat history (with a timestamp)
-        timestamp = time.strftime('%Y-%m-%d %H:%M:%S')  # Get current timestamp
-        session['chat_history'].append((username, message, timestamp))
+        # Save the message to the database
+        save_message(username, message)
         
-        # Save the session
-        session.modified = True
-        flash('Message sent!')  # Optionally, show a success message
+        # Update chat history in session
+        chat_history = session.get('chat_history', [])
+        chat_history.append((username, message))
+        session['chat_history'] = chat_history
 
-    # Get chat history from session
-    chat_history = session['chat_history']
-    
-    return render_template('chat.html', username=session.get('username', 'Guest'), chat_history=chat_history)
+    chat_history = session.get('chat_history', [])
+    return render_template('chat.html', chat_history=chat_history, username=session.get('username'))
 #A way for logging out of the user
 @app.route('/logout')
 def logout():

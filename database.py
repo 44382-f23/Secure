@@ -80,7 +80,7 @@ def get_user_password(username):
 def save_message(username, message):
     conn = sqlite3.connect(DATABASE)
     cursor = conn.cursor()
-    cursor.execute("INSERT INTO messages(username, message) VALUES (?,?)",(username, message))
+    cursor.execute("""INSERT INTO messages(username, message) VALUES (?,?, datatime('now'))""",(username, message))
     conn.commit()
     conn.close()
 
@@ -104,4 +104,14 @@ def send_message():
     conn.commit()
     conn.close()
 
+def insert_message(username, message, timestamp):
+    conn = sqlite3.connect('chat_app.db')  # Connect to the database
+    cursor = conn.cursor()
+    
+    # Insert message into the 'messages' table
+    cursor.execute("INSERT INTO messages (username, message, timestamp) VALUES (?, ?, ?)",
+                   (username, message, timestamp))
+    
+    conn.commit()  # Commit the changes to the database
+    conn.close()  
 
