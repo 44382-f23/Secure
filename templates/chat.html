@@ -35,14 +35,8 @@
     
         </div>
         
-        <script>
-            // Clear the message input field after form submission
-            document.querySelector('form').addEventListener('submit', function() {
-                document.querySelector('#message').value = '';  // Clear the message input field
-            });
-        </script>
-
         <p><a href="{{ url_for('logout') }}">Logout</a></p>
+
     </div>
 </body>
 </html>

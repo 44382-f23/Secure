@@ -78,26 +78,31 @@ def register():
 
 
 #Route for the chat functioning 
-@app.route('/chat', methods= ['GET','POST'])
+@app.route('/chat', methods=['GET', 'POST'])
 def chat():
-    if 'username' not in session:  # Ensure user is logged in
-        flash("You need to log in first.")
-        return redirect(url_for('login'))
+    if request.method == 'POST':
+        message = request.form['message']
+        username = session.get('username')
 
-    username = session['username']  # Get logged-in username
-    chat_history = get_chat_history()  # Fetch chat history from the database
+        if username and message:  # Ensure both username and message are present
+            save_message(username, message)  # Save to the DB
+            flash("Message sent!")
+        else:
+            flash("Message or username missing!")
 
-    return render_template('chat.html', username=username, chat_history=chat_history)
+        return redirect(url_for('chat'))  # Reload chat page
 
-@app.route('/logout')
+    # Handle GET request: fetch chat history
+    chat_history = get_chat_history()  # Retrieve chat history from the database
 
+    return render_template('chat.html', username=session['username'], chat_history=chat_history)
 
 #A way for logging out of the user
 def logout():
     session.pop('username', None)
     session.clear()
     flash("You have been logged out")
-    return redirect(url_for('login.html'))
+    return redirect(url_for('login'))
                     
 
 #Making sure the database is initialized before starting the server.  

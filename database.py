@@ -1,6 +1,6 @@
 import sqlite3
 from werkzeug.security import generate_password_hash, check_password_hash
-
+from flask import request, session
 DATABASE = 'chat_app.db'
 
 #Initialize the database
