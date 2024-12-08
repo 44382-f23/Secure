@@ -80,7 +80,10 @@ def get_user_password(username):
 def save_message(username, message):
     conn = sqlite3.connect(DATABASE)
     cursor = conn.cursor()
-    cursor.execute("""INSERT INTO messages(username, message) VALUES (?,?, datatime('now'))""",(username, message))
+    cursor.execute("""
+            INSERT INTO messages (username, message)
+            VALUES (?, ?)
+        """, (username, message))
     conn.commit()
     conn.close()
 
