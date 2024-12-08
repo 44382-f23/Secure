@@ -26,23 +26,23 @@ def home():
 
 #Defining the login with username and password.
 @app.route('/login', methods=['GET', 'POST'])
-def login():                                    
+def login():
     if request.method == 'POST':
-        username = request.form['username']
-        password = request.form['password']
-        db_password = get_user_password(username)   #Gives the hashed password from the database
+        username = request.form.get('username')
+        password = request.form.get('password')
 
-        #Checks the credentials 
+        if not username or not password:
+            flash("Please provide both username and password.")
+            return redirect(url_for('login'))
+
+        db_password = get_user_password(username)
         if db_password and check_password_hash(db_password, password):
             session['username'] = username
-            return redirect(url_for('chat'))
-        
+            return redirect(url_for('chat'))  # Redirect to chat page
         else:
-            flash("Login failed.Please cleck your credentials")
-            return render_template('login.html')
-    return render_template('login.html')
-
-
+            flash("Invalid username or password.")
+            return redirect(url_for('login'))
+    return render_template('login.html')  # Render login page for GET request
 
 
 #Handling user registration
@@ -78,18 +78,16 @@ def register():
 
 
 #Route for the chat functioning 
-@app.route('/chat', methods= ['GET', 'POST'])
-def chat():                                  
-    if 'username' not in session:
+@app.route('/chat')
+def chat():
+    if 'username' not in session:  # Ensure user is logged in
+        flash("You need to log in first.")
         return redirect(url_for('login'))
-    
-    if request.method == 'POST':
-        message = request.form['message']
-        save_message(session['username'], message)
-    
-    #Get the chat history to be visible
-    chat_history = get_chat_history()
-    return render_template('chat.html',username=session['username'],chat_history=chat_history)
+
+    username = session['username']  # Get logged-in username
+    chat_history = get_chat_history()  # Fetch chat history from the database
+
+    return render_template('chat.html', username=username, chat_history=chat_history)
 
 @app.route('/logout')
 

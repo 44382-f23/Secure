@@ -26,6 +26,14 @@ def init_db():
         timestamp DATETIME DEFAULT CURRENT_TIMESTAMP
     )
     ''')
+    cursor.execute("""
+        CREATE TABLE IF NOT EXISTS chat_history (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            username TEXT NOT NULL,
+            message TEXT NOT NULL,
+            timestamp DATETIME DEFAULT CURRENT_TIMESTAMP
+        );
+    """)
     
     cursor.execute("SELECT name FROM sqlite_master WHERE type='table';")
     tables = cursor.fetchall()
@@ -88,7 +96,7 @@ def save_message(username, message):
 def get_chat_history():
     conn = sqlite3.connect(DATABASE)
     cursor = conn.cursor()
-    cursor.execute("SELECT username, message, timestamp FROM messages ORDER BY id DESC")  # Added timestamp
+    cursor.execute("SELECT username, message, timestamp FROM chat_history ORDER BY timestamp ASC")  # Added timestamp
     chat_history = cursor.fetchall()
     conn.close()
     return chat_history
