@@ -8,18 +8,20 @@
 </head>
 <body>
     <div class="container">
+        <h1>Welcome, {{ username }}</h1>
+        
+        <!-- Flash messages (if any) -->
         {% with messages = get_flashed_messages() %}
             {% if messages %}
                 <ul>
-                    {% for user, message, timestamp in chat_history %}
-                        <li><strong>{{ user }}:</strong> {{ message }} <em>({{ timestamp }})</em></li>
+                    {% for message in messages %}
+                        <li>{{ message }}</li>
                     {% endfor %}
                 </ul>
             {% endif %}
         {% endwith %}
 
-    
-        <h1>Welcome, {{ username }}</h1>
+        <!-- Message input form -->
         <form method="POST" action="{{ url_for('chat') }}">
             <label for="message">Enter message:</label>
             <input type="text" id="message" name="message" required>
@@ -28,15 +30,14 @@
 
         <h2>Chat History</h2>
         
+        <!-- Display chat history -->
         <div>
-        {% for user, message in chat_history %}
-            <p><strong>{{ user }}:</strong> {{ message }}</p>
-        {% endfor %}
-    
+            {% for user, message in chat_history %}
+                <p><strong>{{ user }}:</strong> {{ message }}</p>
+            {% endfor %}
         </div>
-        
-        <p><a href="{{ url_for('logout') }}">Logout</a></p>
 
+        <p><a href="{{ url_for('logout') }}">Logout</a></p>
     </div>
 </body>
 </html>

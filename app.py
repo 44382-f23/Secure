@@ -98,6 +98,7 @@ def chat():
     return render_template('chat.html', username=session['username'], chat_history=chat_history)
 
 #A way for logging out of the user
+@app.route('/logout')
 def logout():
     session.pop('username', None)
     session.clear()
