@@ -1,20 +1,21 @@
 from flask import Flask, render_template, request, redirect, url_for, session, flash
 from werkzeug.security import generate_password_hash, check_password_hash
 from database import init_db, register_user, get_user_password, save_message, get_chat_history 
-import re
-import os
+import re 
+import time
+
 
 
 #Initialize the flask application
 app = Flask(__name__)
 app.secret_key = 'supersecretkey'
 
-#Password must meet the length.
+#Username should match the requirments
 def validate_username(username):
     if not username or len(username) > 20 or not re.match(r'^[a-zA-Z0-9_]+$', username):
         return False
     return True
-
+#Password must meet the length.
 def validate_password(password):
     if not password or len(password) < 8:
         return False
@@ -80,23 +81,27 @@ def register():
 #Route for the chat functioning 
 @app.route('/chat', methods=['GET', 'POST'])
 def chat():
+    # Initialize chat_history in session if it doesn't exist
+    if 'chat_history' not in session:
+        session['chat_history'] = []
+
+    # Handle POST request (user sends a message)
     if request.method == 'POST':
         message = request.form['message']
-        username = session.get('username')
+        username = session.get('username', 'Guest')  # Get username from session or set default as 'Guest'
+        
+        # Append new message to chat history (with a timestamp)
+        timestamp = time.strftime('%Y-%m-%d %H:%M:%S')  # Get current timestamp
+        session['chat_history'].append((username, message, timestamp))
+        
+        # Save the session
+        session.modified = True
+        flash('Message sent!')  # Optionally, show a success message
 
-        if username and message:  # Ensure both username and message are present
-            save_message(username, message)  # Save to the DB
-            flash("Message sent!")
-        else:
-            flash("Message or username missing!")
-
-        return redirect(url_for('chat'))  # Reload chat page
-
-    # Handle GET request: fetch chat history
-    chat_history = get_chat_history()  # Retrieve chat history from the database
-
-    return render_template('chat.html', username=session['username'], chat_history=chat_history)
-
+    # Get chat history from session
+    chat_history = session['chat_history']
+    
+    return render_template('chat.html', username=session.get('username', 'Guest'), chat_history=chat_history)
 #A way for logging out of the user
 @app.route('/logout')
 def logout():
