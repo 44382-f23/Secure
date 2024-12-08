@@ -78,7 +78,7 @@ def register():
 
 
 #Route for the chat functioning 
-@app.route('/chat')
+@app.route('/chat', methods= ['GET','POST'])
 def chat():
     if 'username' not in session:  # Ensure user is logged in
         flash("You need to log in first.")
