@@ -93,3 +93,15 @@ def get_chat_history():
     conn.close()
     return chat_history
 
+def send_message():
+    username = session.get('username')
+    message = request.form['message']
+    
+    # Insert message into database
+    conn = sqlite3.connect('chat_app.db')
+    cursor = conn.cursor()
+    cursor.execute("INSERT INTO messages (username, message) VALUES (?, ?)", (username, message))
+    conn.commit()
+    conn.close()
+
+

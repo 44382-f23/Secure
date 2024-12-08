@@ -11,8 +11,8 @@
         {% with messages = get_flashed_messages() %}
             {% if messages %}
                 <ul>
-                    {% for message in messages %}
-                        <li>{{ message }}</li>
+                    {% for user, message, timestamp in chat_history %}
+                        <li><strong>{{ user }}:</strong> {{ message }} <em>({{ timestamp }})</em></li>
                     {% endfor %}
                 </ul>
             {% endif %}
