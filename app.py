@@ -15,12 +15,14 @@ def validate_username(username):
         return False
     return True
 #Password must meet the length.
-def is_valid_password(password):
+def validate_password(password):
     if len(password) < 8:
         return False
     if not any(char.isdigit() for char in password):
         return False
     if not any(char.isupper() for char in password):
+        return False
+    if not any(char.islower() for char in password):
         return False
     if not any(char in "!@#$%^&*()_+" for char in password):
         return False
@@ -67,7 +69,7 @@ def register():
 
         # Validate password
         if not validate_password(password):
-            flash("Invalid password. Must be at least 8 characters long.")
+            flash("Password must be at least 8 characters, include an uppercase letter, a digit, and a special character.")
             return render_template('register.html')
         
         if not username or not password:
